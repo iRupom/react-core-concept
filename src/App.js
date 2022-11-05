@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import './App.css';
 
 function App() {
@@ -49,6 +50,8 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <Counter></Counter>
+        <Users></Users>
         <ul>
           {
             nayoks.map(nayok => <li>{ nayok}</li>)
@@ -67,11 +70,6 @@ function App() {
         {
           friends.map(friend => <Friend friend={friend}></Friend>)
         }
-        {/* <Product name={products[0].name} price={products[0].price}></Product>
-        <Product name={products[1].name} price={products[1].price}></Product> */}
-        {/* <Person nayak="Nayak Rubel" nayika="Nayika Moushumi"></Person>
-        <Person nayak="Nayak Razzak" nayika="Nayika Suchorita"></Person>
-        <Person nayak="Nayak Jasim" nayika="Nayika Shabana"></Person> */}
       </header>
     </div>
      
@@ -81,6 +79,49 @@ function App() {
 /**
  * Creating friend component
  */
+
+function Users() {
+  let [users, setUsers] = useState([]);
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then(response => response.json())
+      .then(data => setUsers(data))
+  },[])
+  return (
+    <div>
+      <h1>Dynamic Users</h1>
+      <ul>
+        {
+          users.map(user => <li>{user.name }</li>)
+        }
+      </ul>
+    </div>
+  )
+}
+
+function Counter() {
+  let [counter, setCounter] = useState(10);
+  const handleIncrease = () => {
+    const newCount = counter + 1;
+    setCounter(newCount);
+  }
+  const handleDecrease = () => { 
+    const newCount = counter - 1;
+    if (newCount < 0) {
+      counter = 0;
+      setCounter(0);
+    } else {
+      setCounter(newCount);
+    }
+  }
+  return (
+    <div>
+      <h1>Counter : {counter}</h1>
+      <button onClick={handleIncrease}>Increase</button>
+      <button onClick={handleDecrease}>Decrease</button>
+    </div>
+  )
+}
 
 function Friend(props) {
   const friendCardStyle = {
